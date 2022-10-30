@@ -13,7 +13,8 @@ logging.basicConfig(format='%(asctime)s - %(levelname)s - %(message)s', level=lo
 user_name = 'konkov'
 home_dir = "/home/" + user_name
 backup_folder = home_dir + '/Documents/scripts/backup_folder'
-arch_name = home_dir + '/Documents/scripts/' + 'backup_' + time.strftime("%d_%m_%Y_%H-%M")
+arch_name = 'backup_' + time.strftime("%d_%m_%Y_%H-%M")
+arch_path = '/opt/backup/' + arch_name
 # create_dst_path_for_config = dst_backup_folder + '/backup'
 configs_file = home_dir + '/.config'
 configs_file_for_backup = {
@@ -48,7 +49,8 @@ def create_backup(backup_files, dst_path):
 
 
 def archive_backup():
-    shutil.make_archive(arch_name, 'gztar', backup_folder)
+    logging.info('----==== Create archive ====-----')
+    shutil.make_archive(arch_path, 'gztar', backup_folder)
 
 
 if __name__ == '__main__':
