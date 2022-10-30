@@ -15,7 +15,6 @@ home_dir = "/home/" + user_name
 backup_folder = home_dir + '/Documents/scripts/backup_folder'
 arch_name = 'backup_' + time.strftime("%d_%m_%Y_%H-%M")
 arch_path = '/opt/backup/' + arch_name
-# create_dst_path_for_config = dst_backup_folder + '/backup'
 configs_file = home_dir + '/.config'
 configs_file_for_backup = {
     'ssh':      [home_dir + '/.ssh/', []],
