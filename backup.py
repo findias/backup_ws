@@ -29,6 +29,7 @@ configs_file_for_backup = {
 
 ''' Copy backup files in destenation folder'''
 
+
 def create_backup(backup_files, dst_path):
     logging.info('----=== Start copy files ===----')
     for key, value in backup_files.items():
@@ -49,7 +50,9 @@ def create_backup(backup_files, dst_path):
                 shutil.copy(src_copy_path, gen_path)
                 logging.info("Config " + key + " is copy in " + gen_path + file)
 
+
 ''' Get last archive'''
+
 
 def find_last_file(dir):
     logging.info("----==== Start find and get last backup archive ====----")
@@ -61,7 +64,8 @@ def find_last_file(dir):
         logging.info("----====" + last_file + " is last achive ====----")
         return last_file
     else:
-        logging.warning("----==== Current folder " + f_list + " is empty ====----")
+        logging.warning('----==== Current folder ' + f_list + ' is empty ====----')
+
 
 def archive_backup():
     logging.info('----==== Create archive ====-----')
