@@ -61,7 +61,7 @@ def find_last_file(dir):
         f_list = [os.path.join(dir, file) for file in f_list]
         f_list = [file for file in f_list if os.path.isfile(file)]
         last_file = max(f_list, key=os.path.getctime)
-        logging.info("----====" + last_file + " is last achive ====----")
+        logging.info("----==== " + last_file + " is last achive ====----")
         return last_file
     else:
         logging.warning('----==== Current folder ' + f_list + ' is empty ====----')
