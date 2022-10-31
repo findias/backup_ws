@@ -38,12 +38,14 @@ def create_backup(backup_files, dst_path):
         # Backup only selected file
         if value[1] != list():
             for i in value[1]:
-                shutil.copy(value[0] + i, gen_path)
+                src_copy_path = os.path.join(value[0], i)
+                shutil.copy(src_copy_path, gen_path)
                 logging.info("Config " + key + " is copy in " + gen_path + i)
         # Backup folder with all files
         else:
             for file in os.listdir(value[0]):
-                shutil.copy(value[0] + file, gen_path)
+                src_copy_path = os.path.join(value[0], file)
+                shutil.copy(src_copy_path, gen_path)
                 logging.info("Config " + key + " is copy in " + gen_path + file)
 
 
