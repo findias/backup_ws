@@ -50,6 +50,7 @@ def create_backup(backup_files, dst_path):
                 logging.info("Config " + key + " is copy in " + gen_path + file)
 
 ''' Get last archive'''
+
 def find_last_file(dir):
     logging.info("----==== Start find and get last backup archive ====----")
     f_list = os.listdir(dir)
