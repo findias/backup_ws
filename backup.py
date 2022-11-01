@@ -89,7 +89,6 @@ def archive_backup():
     return arch
 
 
-
 if __name__ == '__main__':
     if (os.name == 'posix') and (user_name == os.getlogin()):  # Check OS and username
         try:
