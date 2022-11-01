@@ -95,6 +95,7 @@ if __name__ == '__main__':
             find_last_file(arch_path)
             create_backup(configs_file_for_backup, backup_folder)
             archive_backup()
+            # print(archive_backup() == find_last_file(arch_path))
             # print(get_hash(find_last_file(arch_path)))
         except Exception as e:
             logging.exception(e)
