@@ -2,6 +2,7 @@ import os
 import time
 import logging
 import shutil
+import hashlib
 
 __author__ = 'Konstantin Kovalev'
 
@@ -64,12 +65,29 @@ def find_last_file(dir):
         logging.info("----==== " + last_file + " is last achive ====----")
         return last_file
     else:
-        logging.warning('----==== Current folder ' + f_list + ' is empty ====----')
+        logging.warning('----==== Current folder ' + dir + ' is empty ====----')
+
+
+''' Create hash sum'''
+
+
+def get_hash(filename):
+    md5_hash = hashlib.md5()
+    with open(filename,"rb") as f:
+     # Read and update hash in chunks of 4K
+        for byte_block in iter(lambda: f.read(4096), b""):
+            md5_hash.update(byte_block)
+        md5_summ = md5_hash.hexdigest()
+        logging.info('----==== Check sum for file ' + filename + ' is ' + md5_summ + ' ====----')
+        return md5_summ
 
 
 def archive_backup():
     logging.info('----==== Create archive ====-----')
-    shutil.make_archive(arch_file_path, 'gztar', backup_folder)
+    arch = shutil.make_archive(arch_file_path, 'gztar', backup_folder)
+    logging.info('----==== Name backup is ' + arch + ' ====----')
+    return arch
+
 
 
 if __name__ == '__main__':
@@ -78,6 +96,7 @@ if __name__ == '__main__':
             find_last_file(arch_path)
             create_backup(configs_file_for_backup, backup_folder)
             archive_backup()
+            # print(get_hash(find_last_file(arch_path)))
         except Exception as e:
             logging.exception(e)
         else:
