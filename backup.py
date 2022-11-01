@@ -52,7 +52,7 @@ def create_backup(backup_files, dst_path):
                 logging.info("Config " + key + " is copy in " + gen_path + file)
 
 
-''' Get last archive'''
+''' Get last archive. Return name last of file'''
 
 
 def find_last_file(dir):
@@ -68,7 +68,7 @@ def find_last_file(dir):
         logging.warning('----==== Current folder ' + dir + ' is empty ====----')
 
 
-''' Create hash sum'''
+''' Create hash sum and return md5_sum'''
 
 
 def get_hash(filename):
@@ -95,7 +95,6 @@ if __name__ == '__main__':
             find_last_file(arch_path)
             create_backup(configs_file_for_backup, backup_folder)
             archive_backup()
-            # print(archive_backup() == find_last_file(arch_path))
             # print(get_hash(find_last_file(arch_path)))
         except Exception as e:
             logging.exception(e)
