@@ -1,4 +1,5 @@
 import os
+import tarfile
 import time
 import logging
 import shutil
@@ -14,9 +15,9 @@ logging.basicConfig(format='%(asctime)s - %(levelname)s - %(message)s', level=lo
 user_name = 'konkov'
 home_dir = "/home/" + user_name
 backup_folder = home_dir + '/Documents/scripts/backup_folder'
-arch_name = 'backup_' + time.strftime("%d_%m_%Y_%H-%M")
-arch_path = '/opt/backup/'
-arch_file_path = arch_path + arch_name
+arc_file_name = 'backup_' + time.strftime("%d_%m_%Y_%H-%M") + '.tar.gz'
+path_for_arc = '/opt/backup/'
+arc_file_path = path_for_arc + arc_file_name
 configs_file = home_dir + '/.config'
 configs_file_for_backup = {
     'ssh':      [home_dir + '/.ssh/', []],
@@ -33,6 +34,7 @@ configs_file_for_backup = {
 
 def create_backup(backup_files, dst_path):
     logging.info('----=== Start copy files ===----')
+    list_file_for_backup = []
     for key, value in backup_files.items():
         gen_path = dst_path + value[0]
         ''' Check: if folder is not exist create folder '''
@@ -43,13 +45,17 @@ def create_backup(backup_files, dst_path):
             for i in value[1]:
                 src_copy_path = os.path.join(value[0], i)
                 shutil.copy(src_copy_path, gen_path)
+                list_file_for_backup.append(gen_path + i)
                 logging.info("Config " + key + " is copy in " + gen_path + i)
         # Backup folder with all files
         else:
             for file in os.listdir(value[0]):
                 src_copy_path = os.path.join(value[0], file)
                 shutil.copy(src_copy_path, gen_path)
+                list_file_for_backup.append(gen_path + file)
                 logging.info("Config " + key + " is copy in " + gen_path + file)
+    logging.info('----=== Copy files is complete ===----')
+    return list_file_for_backup
 
 
 ''' Get last archive. Return name last of file'''
@@ -82,20 +88,35 @@ def get_hash(filename):
         return md5_summ
 
 
+# def archive_backup(create_arc_file, path):
+#     logging.info('----==== Start create archive ====-----')
+#     directory = os.listdir(path)
+#     with tarfile.open(create_arc_file, 'w:gz') as tar:
+#         for name in directory:
+#             tar.add(name)
+#             logging.info('In archive add ' + name)
+#         print(len(tar.getmembers()))
+#     logging.info('----==== Archive is success. Name file is ' + create_arc_file + ' ====----')
+
+
 def archive_backup():
-    logging.info('----==== Create archive ====-----')
-    arch = shutil.make_archive(arch_file_path, 'gztar', backup_folder)
-    logging.info('----==== Name backup is ' + arch + ' ====----')
+    logging.info('----==== Start create archive ====-----')
+    arch = shutil.make_archive(arc_file_path, 'gztar', backup_folder)
+    logging.info('----==== Archive is success. Name file is ' + arc_file_name + ' ====----')
     return arch
 
 
 if __name__ == '__main__':
     if (os.name == 'posix') and (user_name == os.getlogin()):  # Check OS and username
         try:
-            find_last_file(arch_path)
+            find_last_file(path_for_arc)
             create_backup(configs_file_for_backup, backup_folder)
+            # print(len(cb))
             archive_backup()
             # print(get_hash(find_last_file(arch_path)))
+            # tar =tarfile.open('/opt/backup/tbackup.tar.gz', 'r:gz')
+            # print(tar.gettarinfo())
+            # tar.close()
         except Exception as e:
             logging.exception(e)
         else:
