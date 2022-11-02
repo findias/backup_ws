@@ -14,7 +14,8 @@ logging.basicConfig(format='%(asctime)s - %(levelname)s - %(message)s', level=lo
 
 user_name = 'konkov'
 home_dir = "/home/" + user_name
-backup_folder = home_dir + '/Documents/scripts/backup_folder'
+backup_folder = 'backup_folder'
+backup_folder_path = home_dir + '/Documents/scripts/' + backup_folder
 arc_file_name = 'backup_' + time.strftime("%d_%m_%Y_%H-%M") + '.tar.gz'
 path_for_arc = '/opt/backup/'
 arc_file_path = path_for_arc + arc_file_name
@@ -88,32 +89,27 @@ def get_hash(filename):
         return md5_summ
 
 
-# def archive_backup(create_arc_file, path):
-#     logging.info('----==== Start create archive ====-----')
-#     directory = os.listdir(path)
-#     with tarfile.open(create_arc_file, 'w:gz') as tar:
-#         for name in directory:
-#             tar.add(name)
-#             logging.info('In archive add ' + name)
-#         print(len(tar.getmembers()))
-#     logging.info('----==== Archive is success. Name file is ' + create_arc_file + ' ====----')
-
-
-def archive_backup():
+def archive_backup(create_arc_file, src_folder, arcname):
     logging.info('----==== Start create archive ====-----')
-    arch = shutil.make_archive(arc_file_path, 'gztar', backup_folder)
-    logging.info('----==== Archive is success. Name file is ' + arc_file_name + ' ====----')
-    return arch
+    with tarfile.open(create_arc_file, 'w:gz') as tar:
+        tar.add(src_folder, arcname)
+    logging.info('----==== Archive is success. Name file is ' + create_arc_file + ' ====----')
+
+
+# def archive_backup():
+#     logging.info('----==== Start create archive ====-----')
+#     arch = shutil.make_archive(arc_file_path, 'gztar', backup_folder)
+#     logging.info('----==== Archive is success. Name file is ' + arc_file_name + ' ====----')
+#     return arch
 
 
 if __name__ == '__main__':
     if (os.name == 'posix') and (user_name == os.getlogin()):  # Check OS and username
         try:
-            find_last_file(path_for_arc)
-            create_backup(configs_file_for_backup, backup_folder)
-            # print(len(cb))
-            archive_backup()
-            # print(get_hash(find_last_file(arch_path)))
+            # find_last_file(path_for_arc)
+            create_backup(configs_file_for_backup, backup_folder_path)
+            archive_backup(arc_file_path, backup_folder_path, './backup_folder')
+             # print(get_hash(find_last_file(arch_path)))
             # tar =tarfile.open('/opt/backup/tbackup.tar.gz', 'r:gz')
             # print(tar.gettarinfo())
             # tar.close()
