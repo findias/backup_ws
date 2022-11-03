@@ -13,7 +13,7 @@ start_time = time.time()
 logging.basicConfig(format='%(asctime)s - %(levelname)s - %(message)s', level=logging.INFO, datefmt='%d-%b-%y %H:%M:%S')
 
 user_name = 'konkov'
-home_dir = "/home/" + user_name
+home_dir = os.path.join('/home/', user_name)
 backup_folder = 'backup_folder'
 backup_folder_path = home_dir + '/Documents/scripts/' + backup_folder
 arc_file_name = 'backup_' + time.strftime("%d_%m_%Y_%H-%M") + '.tar.gz'
@@ -28,6 +28,7 @@ configs_file_for_backup = {
     'nitrogen': [configs_file + '/nitrogen/', []],
     'picom':    [configs_file + '/picom/', ['picom.conf']],
     'rofi':     [configs_file + '/rofi/', ['config.rasi']],
+    'zshrc':    [home_dir, ['.zshrc', '.zshrc.pre-oh-my-zsh', '.zsh_history', 'first_sc.sh']],
 }
 
 ''' Copy backup files in destenation folder'''
@@ -55,7 +56,7 @@ def create_backup(backup_files, dst_path):
                 shutil.copy(src_copy_path, gen_path)
                 list_file_for_backup.append(gen_path + file)
                 logging.info("Config " + key + " is copy in " + gen_path + file)
-    logging.info('----=== Copy files is complete ===----')
+    logging.info('----==== Copy files is complete ====----')
     return list_file_for_backup
 
 
@@ -93,14 +94,23 @@ def archive_backup(create_arc_file, src_folder, arcname):
     logging.info('----==== Start create archive ====-----')
     with tarfile.open(create_arc_file, 'w:gz') as tar:
         tar.add(src_folder, arcname)
-    logging.info('----==== Archive is success. Name file is ' + create_arc_file + ' ====----')
+    logging.info('----==== Create archive is success. Name file is ' + create_arc_file + ' ====----')
 
 
-# def archive_backup():
-#     logging.info('----==== Start create archive ====-----')
-#     arch = shutil.make_archive(arc_file_path, 'gztar', backup_folder)
-#     logging.info('----==== Archive is success. Name file is ' + arc_file_name + ' ====----')
-#     return arch
+''' Check archive '''
+
+
+def check_archive(file):
+    try:
+        logging.info('----==== Check archive is starting ====----')
+        check_list = []
+        with tarfile.open(file) as tar:
+            for name in tar.getmembers():
+                check_list.append(name)
+            logging.info('----==== Check archive is complete ====----')   # TODO Add out in file.
+    except Exception as e:
+        logging.warning('Check is failing. ' + file + 'is a bad archive')
+        logging.exception(e)
 
 
 if __name__ == '__main__':
@@ -109,6 +119,7 @@ if __name__ == '__main__':
             # find_last_file(path_for_arc)
             create_backup(configs_file_for_backup, backup_folder_path)
             archive_backup(arc_file_path, backup_folder_path, './backup_folder')
+            check_archive(arc_file_path)
              # print(get_hash(find_last_file(arch_path)))
             # tar =tarfile.open('/opt/backup/tbackup.tar.gz', 'r:gz')
             # print(tar.gettarinfo())
@@ -116,7 +127,7 @@ if __name__ == '__main__':
         except Exception as e:
             logging.exception(e)
         else:
-            print('Backup is success')
+            logging.info('----==== Buckup is complete ====----')
     else:
         print('Backup did not pass checking')
-    print("--- %s seconds ---" % (time.time() - start_time))
+print("--- %s seconds ---" % (time.time() - start_time))
