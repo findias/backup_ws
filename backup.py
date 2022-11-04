@@ -10,7 +10,11 @@ __author__ = 'Konstantin Kovalev'
 # -*- coding: utf-8 -*-
 
 start_time = time.time()
-logging.basicConfig(format='%(asctime)s - %(levelname)s - %(message)s', level=logging.INFO, datefmt='%d-%b-%y %H:%M:%S')
+logging.basicConfig(format='%(asctime)s - %(levelname)s - %(message)s',
+                    level=logging.INFO,
+                    datefmt='%d-%b-%y %H:%M:%S',
+                    filename='/opt/backup/backup.log',
+                    filemode='a')
 
 user_name = 'konkov'
 home_dir = os.path.join('/home/', user_name)
@@ -28,7 +32,7 @@ configs_file_for_backup = {
     'nitrogen': [configs_file + '/nitrogen/', []],
     'picom':    [configs_file + '/picom/', ['picom.conf']],
     'rofi':     [configs_file + '/rofi/', ['config.rasi']],
-    'zshrc':    [home_dir, ['.zshrc', '.zshrc.pre-oh-my-zsh', '.zsh_history', 'first_sc.sh']],
+    'root':     [home_dir, ['.zshrc', '.zshrc.pre-oh-my-zsh', '.zsh_history', 'first_sc.sh']],
 }
 
 ''' Copy backup files in destenation folder'''
