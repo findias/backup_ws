@@ -38,7 +38,6 @@ configs_file_for_backup = {
     'my_data':  [doc_dir, ['Database.kdbx']],
     'stocks':   [os.path.join(doc_dir,  'stocks/'), []],
     'db_pg':    [os.path.join(doc_dir, 'bd_postgress/'), []],
-    'script':   [os.path.join(doc_dir, 'scripts/backup_ws/'), ['backup.py', 'LICENSE', 'README.md']],
 }
 
 ''' Copy backup files in destenation folder'''
