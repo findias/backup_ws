@@ -4,6 +4,8 @@ import time
 import logging
 import shutil
 import hashlib
+import gnupg
+
 
 __author__ = 'Konstantin Kovalev'
 
@@ -26,6 +28,10 @@ arc_file_name = 'backup_' + time.strftime("%d_%m_%y_%H-%M") + '.tar.gz'
 path_for_arc = '/opt/backup/'
 arc_file_path = path_for_arc + arc_file_name
 configs_file = home_dir + '/.config'
+
+encrypt = False
+encrypt_dir = os.path.join(home_dir, '.gnupg/')
+
 configs_file_for_backup = {
     'ssh':      [os.path.join(home_dir, '.ssh/'), []],
     'nvim':     [os.path.join(configs_file, 'nvim/'), ['init.vim', 'coc-settings.json']],
@@ -122,6 +128,12 @@ def check_archive(file):
         logging.exception(e)
 
 
+def gpg_encrypt(gpg_dir, data, recipients, do_enc):
+    if do_enc:
+        gpg = gnupg.GPG(gpg_dir)
+        gpg.encrypt(data, recipients)
+
+
 if __name__ == '__main__':
     if (os.name == 'posix') and (user_name == os.getlogin()):  # Check OS and username
         try:
@@ -129,7 +141,8 @@ if __name__ == '__main__':
             create_backup(configs_file_for_backup, backup_folder_path)
             archive_backup(arc_file_path, backup_folder_path, './backup')
             check_archive(arc_file_path)
-             # print(get_hash(find_last_file(arch_path)))
+            gpg_encrypt(encrypt_dir, arc_file_path, 'findias@bk.ru', encrypt)
+            # print(get_hash(find_last_file(arch_path)))
             # tar =tarfile.open('/opt/backup/tbackup.tar.gz', 'r:gz')
             # print(tar.gettarinfo())
             # tar.close()
