@@ -14,25 +14,31 @@ logging.basicConfig(format='%(asctime)s - %(levelname)s - %(message)s',
                     level=logging.INFO,
                     datefmt='%d-%b-%y %H:%M:%S',
                     filename='/opt/backup/backup.log',
-                    filemode='a')
+                    filemode='a'
+                    )
 
 user_name = 'konkov'
 home_dir = os.path.join('/home/', user_name)
-backup_folder = 'backup_folder'
-backup_folder_path = home_dir + '/Documents/scripts/' + backup_folder
-arc_file_name = 'backup_' + time.strftime("%d_%m_%Y_%H-%M") + '.tar.gz'
+doc_dir = os.path.join(home_dir, 'Documents')
+backup_folder = 'backup'
+backup_folder_path = os.path.join(doc_dir, backup_folder)
+arc_file_name = 'backup_' + time.strftime("%d_%m_%y_%H-%M") + '.tar.gz'
 path_for_arc = '/opt/backup/'
 arc_file_path = path_for_arc + arc_file_name
 configs_file = home_dir + '/.config'
 configs_file_for_backup = {
-    'ssh':      [home_dir + '/.ssh/', []],
-    'nvim':     [configs_file + '/nvim/', ['init.vim', 'coc-settings.json']],
-    'i3':       [configs_file + '/i3/', []],
-    'neofetch': [configs_file + '/neofetch/', []],
-    'nitrogen': [configs_file + '/nitrogen/', []],
-    'picom':    [configs_file + '/picom/', ['picom.conf']],
-    'rofi':     [configs_file + '/rofi/', ['config.rasi']],
+    'ssh':      [os.path.join(home_dir, '.ssh/'), []],
+    'nvim':     [os.path.join(configs_file, 'nvim/'), ['init.vim', 'coc-settings.json']],
+    'i3':       [os.path.join(configs_file, 'i3/'), []],
+    'neofetch': [os.path.join(configs_file, 'neofetch/'), []],
+    'nitrogen': [os.path.join(configs_file, 'nitrogen/'), []],
+    'picom':    [os.path.join(configs_file, 'picom/'), ['picom.conf']],
+    'rofi':     [os.path.join(configs_file, 'rofi/'), ['config.rasi']],
     'root':     [home_dir, ['.zshrc', '.zshrc.pre-oh-my-zsh', '.zsh_history', 'first_sc.sh']],
+    'my_data':  [doc_dir, ['Database.kdbx']],
+    'stocks':   [os.path.join(doc_dir,  'stocks/'), []],
+    'db_pg':    [os.path.join(doc_dir, 'bd_postgress/'), []],
+    'script':   [os.path.join(doc_dir, 'scripts/backup_ws/'), ['backup.py', 'LICENSE', 'README.md']],
 }
 
 ''' Copy backup files in destenation folder'''
@@ -50,14 +56,14 @@ def create_backup(backup_files, dst_path):
         if value[1] != list():
             for i in value[1]:
                 src_copy_path = os.path.join(value[0], i)
-                shutil.copy(src_copy_path, gen_path)
+                shutil.copy2(src_copy_path, gen_path)
                 list_file_for_backup.append(gen_path + i)
                 logging.info("Config " + key + " is copy in " + gen_path + i)
         # Backup folder with all files
         else:
             for file in os.listdir(value[0]):
                 src_copy_path = os.path.join(value[0], file)
-                shutil.copy(src_copy_path, gen_path)
+                shutil.copy2(src_copy_path, gen_path)
                 list_file_for_backup.append(gen_path + file)
                 logging.info("Config " + key + " is copy in " + gen_path + file)
     logging.info('----==== Copy files is complete ====----')
@@ -111,7 +117,7 @@ def check_archive(file):
         with tarfile.open(file) as tar:
             for name in tar.getmembers():
                 check_list.append(name)
-            logging.info('----==== Check archive is complete ====----')   # TODO Add out in file.
+            logging.info('----==== Check archive is complete ====----')
     except Exception as e:
         logging.warning('Check is failing. ' + file + 'is a bad archive')
         logging.exception(e)
@@ -122,7 +128,7 @@ if __name__ == '__main__':
         try:
             # find_last_file(path_for_arc)
             create_backup(configs_file_for_backup, backup_folder_path)
-            archive_backup(arc_file_path, backup_folder_path, './backup_folder')
+            archive_backup(arc_file_path, backup_folder_path, './backup')
             check_archive(arc_file_path)
              # print(get_hash(find_last_file(arch_path)))
             # tar =tarfile.open('/opt/backup/tbackup.tar.gz', 'r:gz')
