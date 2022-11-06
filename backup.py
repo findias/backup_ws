@@ -16,7 +16,7 @@ logging.basicConfig(
                     format='%(asctime)s - %(levelname)s - %(message)s',
                     level=logging.INFO,
                     datefmt='%d-%b-%y %H:%M:%S',
-                    filename='/opt/backup/backup.log',
+                    # filename='/opt/backup/backup.log',
                     filemode='a'
                     )
 
@@ -60,18 +60,18 @@ def create_backup(backup_files, dst_path):
         if not os.path.exists(gen_path):
             os.makedirs(gen_path)
         # Backup only selected file
-        if value[1] != list():
+        if len(value[1]) != 0:
             for i in value[1]:
                 src_copy_path = os.path.join(value[0], i)
                 shutil.copy2(src_copy_path, gen_path)
-                list_file_for_backup.append(gen_path + i)
+                list_file_for_backup.append(os.path.join(gen_path + i))
                 logging.info("Config " + key + " is copy in " + gen_path + i)
         # Backup folder with all files
         else:
             for file in os.listdir(value[0]):
                 src_copy_path = os.path.join(value[0], file)
                 shutil.copy2(src_copy_path, gen_path)
-                list_file_for_backup.append(gen_path + file)
+                list_file_for_backup.append(os.path.join(gen_path + file))
                 logging.info("Config " + key + " is copy in " + gen_path + file)
     logging.info('----==== Copy files is complete ====----')
     return list_file_for_backup
@@ -133,7 +133,7 @@ def check_archive(file):
 def gpg_encrypt(gpg_dir, data, recipients, do_enc):
     if do_enc:
         logging.info('----==== Start encryption archive ====----')
-        encrypt_file_name = data + ' enc'
+        encrypt_file_name = data + '.crypt'
         gpg = gnupg.GPG(gnupghome=gpg_dir)
         crt_encrypt_file = gpg.encrypt_file(data, recipients, output=encrypt_file_name)
         logging.info('----==== Success encryption archive ' + encrypt_file_name + ' ====----')
