@@ -46,6 +46,7 @@ configs_file_for_backup = {
     'my_data':  [doc_dir, ['Database.kdbx']],
     'stocks':   [os.path.join(doc_dir,  'stocks/'), []],
     'db_pg':    [os.path.join(doc_dir, 'bd_postgress/'), []],
+    # 'oh-my-zsh':    [os.path.join(home_dir, '.oh-my-zsh/'), []],
 }
 
 ''' Copy backup files in destenation folder'''
@@ -54,6 +55,11 @@ configs_file_for_backup = {
 def create_backup(backup_files, dst_path):
     logging.info('----=== Start copy files ===----')
     list_file_for_backup = []
+    if not os.path.exists(dst_path):
+        os.makedirs(dst_path)
+    else:
+        shutil.rmtree(dst_path)
+        os.makedirs(dst_path)
     for key, value in backup_files.items():
         gen_path = dst_path + value[0]
         ''' Check: if folder is not exist create folder '''
@@ -67,14 +73,11 @@ def create_backup(backup_files, dst_path):
                 path_file = os.path.join(gen_path, i)
                 list_file_for_backup.append(path_file)
                 logging.info("Config " + key + " is copy in " + path_file)
-        # Backup folder with all files
         else:
-            for file in os.listdir(value[0]):
-                src_copy_path = os.path.join(value[0], file)
-                shutil.copy2(src_copy_path, gen_path)
-                path_file = os.path.join(gen_path, file)
-                list_file_for_backup.append(path_file)
-                logging.info("Config " + key + " is copy in " + path_file)
+            shutil.copytree(value[0], gen_path, dirs_exist_ok=True)
+            path_file = os.path.join(gen_path, value[0])
+            list_file_for_backup.append(path_file)
+            logging.info("Config " + key + " is copy in " + path_file)
     logging.info('----==== Copy files is complete ====----')
     return list_file_for_backup
 
