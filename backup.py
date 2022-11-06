@@ -12,14 +12,15 @@ __author__ = 'Konstantin Kovalev'
 # -*- coding: utf-8 -*-
 
 start_time = time.time()
-logging.basicConfig(format='%(asctime)s - %(levelname)s - %(message)s',
+logging.basicConfig(
+                    format='%(asctime)s - %(levelname)s - %(message)s',
                     level=logging.INFO,
                     datefmt='%d-%b-%y %H:%M:%S',
                     filename='/opt/backup/backup.log',
                     filemode='a'
                     )
 
-user_name = 'konkov'
+user_name = os.getlogin()
 home_dir = os.path.join('/home/', user_name)
 doc_dir = os.path.join(home_dir, 'Documents')
 backup_folder = 'backup'
@@ -29,8 +30,8 @@ path_for_arc = '/opt/backup/'
 arc_file_path = path_for_arc + arc_file_name
 configs_file = home_dir + '/.config'
 
-encrypt = False
-encrypt_dir = os.path.join(home_dir, '.gnupg/')
+encrypt = True
+encrypt_dir = os.path.join(home_dir, '.gnupg')
 
 configs_file_for_backup = {
     'ssh':      [os.path.join(home_dir, '.ssh/'), []],
@@ -130,8 +131,12 @@ def check_archive(file):
 
 def gpg_encrypt(gpg_dir, data, recipients, do_enc):
     if do_enc:
-        gpg = gnupg.GPG(gpg_dir)
-        gpg.encrypt(data, recipients)
+        logging.info('----==== Start encryption archive ====----')
+        encrypt_file_name = data + ' enc'
+        gpg = gnupg.GPG(gnupghome=gpg_dir)
+        crt_encrypt_file = gpg.encrypt_file(data, recipients, output=encrypt_file_name)
+        logging.info('----==== Success encryption archive ' + encrypt_file_name + ' ====----')
+        return crt_encrypt_file
 
 
 if __name__ == '__main__':
@@ -142,10 +147,6 @@ if __name__ == '__main__':
             archive_backup(arc_file_path, backup_folder_path, './backup')
             check_archive(arc_file_path)
             gpg_encrypt(encrypt_dir, arc_file_path, 'findias@bk.ru', encrypt)
-            # print(get_hash(find_last_file(arch_path)))
-            # tar =tarfile.open('/opt/backup/tbackup.tar.gz', 'r:gz')
-            # print(tar.gettarinfo())
-            # tar.close()
         except Exception as e:
             logging.exception(e)
         else:
