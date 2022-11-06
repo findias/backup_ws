@@ -16,7 +16,7 @@ logging.basicConfig(
                     format='%(asctime)s - %(levelname)s - %(message)s',
                     level=logging.INFO,
                     datefmt='%d-%b-%y %H:%M:%S',
-                    # filename='/opt/backup/backup.log',
+                    filename='/opt/backup/backup.log',
                     filemode='a'
                     )
 
