@@ -64,15 +64,17 @@ def create_backup(backup_files, dst_path):
             for i in value[1]:
                 src_copy_path = os.path.join(value[0], i)
                 shutil.copy2(src_copy_path, gen_path)
-                list_file_for_backup.append(os.path.join(gen_path + i))
-                logging.info("Config " + key + " is copy in " + gen_path + i)
+                path_file = os.path.join(gen_path, i)
+                list_file_for_backup.append(path_file)
+                logging.info("Config " + key + " is copy in " + path_file)
         # Backup folder with all files
         else:
             for file in os.listdir(value[0]):
                 src_copy_path = os.path.join(value[0], file)
                 shutil.copy2(src_copy_path, gen_path)
-                list_file_for_backup.append(os.path.join(gen_path + file))
-                logging.info("Config " + key + " is copy in " + gen_path + file)
+                path_file = os.path.join(gen_path, file)
+                list_file_for_backup.append(path_file)
+                logging.info("Config " + key + " is copy in " + path_file)
     logging.info('----==== Copy files is complete ====----')
     return list_file_for_backup
 
