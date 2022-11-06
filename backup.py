@@ -31,6 +31,7 @@ arc_file_path = path_for_arc + arc_file_name
 configs_file = home_dir + '/.config'
 
 encrypt = True
+id_key = 'findias@bk.ru'
 encrypt_dir = os.path.join(home_dir, '.gnupg')
 
 configs_file_for_backup = {
@@ -146,7 +147,7 @@ if __name__ == '__main__':
             create_backup(configs_file_for_backup, backup_folder_path)
             archive_backup(arc_file_path, backup_folder_path, './backup')
             check_archive(arc_file_path)
-            gpg_encrypt(encrypt_dir, arc_file_path, 'findias@bk.ru', encrypt)
+            gpg_encrypt(encrypt_dir, arc_file_path, id_key, encrypt)
         except Exception as e:
             logging.exception(e)
         else:
