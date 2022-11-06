@@ -55,11 +55,13 @@ configs_file_for_backup = {
 def create_backup(backup_files, dst_path):
     logging.info('----=== Start copy files ===----')
     list_file_for_backup = []
+    # Clear and create backup folder
     if not os.path.exists(dst_path):
         os.makedirs(dst_path)
     else:
         shutil.rmtree(dst_path)
         os.makedirs(dst_path)
+    # Take a config dictionary and copy in backup folder
     for key, value in backup_files.items():
         gen_path = dst_path + value[0]
         ''' Check: if folder is not exist create folder '''
@@ -104,12 +106,12 @@ def find_last_file(dir):
 def get_hash(filename):
     md5_hash = hashlib.md5()
     with open(filename,"rb") as f:
-     # Read and update hash in chunks of 4K
+        # Read and update hash in chunks of 4K
         for byte_block in iter(lambda: f.read(4096), b""):
             md5_hash.update(byte_block)
-        md5_summ = md5_hash.hexdigest()
-        logging.info('----==== Check sum for file ' + filename + ' is ' + md5_summ + ' ====----')
-        return md5_summ
+        md5_sum = md5_hash.hexdigest()
+        logging.info('----==== Check sum for file ' + filename + ' is ' + md5_sum + ' ====----')
+        return md5_sum
 
 
 def archive_backup(create_arc_file, src_folder, arcname):
