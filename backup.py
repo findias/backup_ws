@@ -12,6 +12,7 @@ __author__ = 'Konstantin Kovalev'
 # -*- coding: utf-8 -*-
 
 start_time = time.time()
+
 logging.basicConfig(
                     format='%(asctime)s - %(levelname)s - %(message)s',
                     level=logging.INFO,
@@ -19,24 +20,27 @@ logging.basicConfig(
                     filename='/opt/backup/backup.log',
                     filemode='a'
                     )
-
+# Params for path source
 user_name = os.getlogin()
 home_dir = os.path.join('/home/', user_name)
 doc_dir = os.path.join(home_dir, 'Documents')
+configs_file = home_dir + '/.config'
 
+# Params for destenation backup folder
 backup_folder = 'backup'
 backup_folder_path = os.path.join(doc_dir, backup_folder)
 
+# Params for archive
 arc_file_name = 'backup_' + time.strftime("%d_%m_%y_%H-%M") + '.tar.gz'
 path_for_arc = '/opt/backup/'
 arc_file_path = path_for_arc + arc_file_name
 
-configs_file = home_dir + '/.config'
-
+# Params for encrypt
 encrypt = True
 id_key = 'findias@bk.ru'
 encrypt_dir = os.path.join(home_dir, '.gnupg')
 
+# Config for backup data
 configs_file_for_backup = {
     'ssh':      [os.path.join(home_dir, '.ssh/'), []],
     'nvim':     [os.path.join(configs_file, 'nvim/'), ['init.vim', 'coc-settings.json']],
