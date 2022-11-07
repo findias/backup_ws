@@ -23,11 +23,14 @@ logging.basicConfig(
 user_name = os.getlogin()
 home_dir = os.path.join('/home/', user_name)
 doc_dir = os.path.join(home_dir, 'Documents')
+
 backup_folder = 'backup'
 backup_folder_path = os.path.join(doc_dir, backup_folder)
+
 arc_file_name = 'backup_' + time.strftime("%d_%m_%y_%H-%M") + '.tar.gz'
 path_for_arc = '/opt/backup/'
 arc_file_path = path_for_arc + arc_file_name
+
 configs_file = home_dir + '/.config'
 
 encrypt = True
