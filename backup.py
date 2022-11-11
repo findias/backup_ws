@@ -162,6 +162,7 @@ if __name__ == '__main__':
             archive_backup(arc_file_path, backup_folder_path, './backup')
             check_archive(arc_file_path)
             gpg_encrypt(encrypt_dir, arc_file_path, id_key, encrypt)
+            get_hash(arc_file_path)
         except Exception as e:
             logging.exception(e)
         else:
