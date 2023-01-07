@@ -53,6 +53,7 @@ configs_file_for_backup = {
     'my_data':  [os.path.join(doc_dir, 'bd_pass/'), []],
     'stocks':   [os.path.join(doc_dir,  'stocks/'), []],
     'db_pg':    [os.path.join(doc_dir, 'bd_postgress/'), []],
+    'alacritty':[os.path.join(configs_file, 'alacritty/'), []],
     # 'oh-my-zsh':    [os.path.join(home_dir, '.oh-my-zsh/'), []],
 }
 
