@@ -34,6 +34,7 @@ backup_folder_path = os.path.join(doc_dir, backup_folder)
 arc_file_name = 'backup_' + time.strftime("%d_%m_%y_%H-%M") + '.tar.gz'
 path_for_arc = '/opt/backup/'
 arc_file_path = path_for_arc + arc_file_name
+curr_file_path = path_for_arc + 'curr_backup.tar.gz'
 
 # Params for encrypt
 encrypt = True
@@ -161,8 +162,12 @@ if __name__ == '__main__':
             # find_last_file(path_for_arc)
             create_backup(configs_file_for_backup, backup_folder_path)
             archive_backup(arc_file_path, backup_folder_path, './backup')
+            archive_backup(curr_file_path, backup_folder_path, './backup')
+            check_archive(arc_file_path)
+            check_archive(curr_file_path)
             check_archive(arc_file_path)
             gpg_encrypt(encrypt_dir, arc_file_path, id_key, encrypt)
+            gpg_encrypt(encrypt_dir, curr_file_path, id_key, encrypt)
             get_hash(arc_file_path)
         except Exception as e:
             logging.exception(e)
