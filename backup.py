@@ -41,12 +41,12 @@ encrypt = True
 id_key = 'findias@bk.ru'
 encrypt_dir = os.path.join(home_dir, '.gnupg')
 
-# Config for backup data
+#  onfig for backup data
 configs_file_for_backup = {
     'ssh':      [os.path.join(home_dir, '.ssh/'), []],
-    'nvim':     [os.path.join(configs_file, 'nvim/'), ['init.vim', 'coc-settings.json']],
+    'nvim':     [os.path.join(configs_file, 'nvim/'), []],
     'i3':       [os.path.join(configs_file, 'i3/'), []],
-    'i3block':  [os.path.join(configs_file, 'i3blocks/'), []],
+   'i3block':  [os.path.join(configs_file, 'i3blocks/'), []],
     'neofetch': [os.path.join(configs_file, 'neofetch/'), []],
     'nitrogen': [os.path.join(configs_file, 'nitrogen/'), []],
     'picom':    [os.path.join(configs_file, 'picom/'), ['picom.conf']],
