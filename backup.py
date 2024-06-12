@@ -51,7 +51,7 @@ configs_file_for_backup = {
     'nitrogen': [os.path.join(configs_file, 'nitrogen/'), []],
     'picom':    [os.path.join(configs_file, 'picom/'), ['picom.conf']],
     'rofi':     [os.path.join(configs_file, 'rofi/'), ['config.rasi']],
-    'root':     [home_dir, ['.zshrc', '.zshrc.pre-oh-my-zsh', '.zsh_history', 'first_sc.sh']],
+    'root':     [home_dir, ['.zshrc', '.zshrc.pre-oh-my-zsh', '.zsh_history']],
     # 'my_data':  [os.path.join(doc_dir, 'bd_pass/'), []],
     'stocks':   [os.path.join(doc_dir,  'stocks/'), []],
     'db_pg':    [os.path.join(doc_dir, 'bd_postgress/'), []],
